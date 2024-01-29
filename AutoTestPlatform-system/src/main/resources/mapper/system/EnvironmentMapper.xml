@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zou.system.mapper.EnvironmentMapper">
+
+    <resultMap type="Environment" id="EnvironmentResult">
+        <result property="envirId"    column="envirId"    />
+        <result property="envirName"    column="envirName"    />
+        <result property="envirUrl"    column="envirUrl"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <resultMap id="EnvironmentInterinfoResult" type="Environment" extends="EnvironmentResult">
+        <collection property="interinfoList" notNullColumn="sub_interId" javaType="java.util.List" resultMap="InterinfoResult" />
+    </resultMap>
+
+    <resultMap type="Interinfo" id="InterinfoResult">
+        <result property="interId"    column="sub_interId"    />
+        <result property="interName"    column="sub_interName"    />
+        <result property="interUrl"    column="sub_interUrl"    />
+        <result property="method"    column="sub_method"    />
+        <result property="paramType"    column="sub_paramType"    />
+        <result property="envirId"    column="sub_envirId"    />
+        <result property="interComment"    column="sub_interComment"    />
+        <result property="userId"    column="sub_user_id"    />
+    </resultMap>
+
+    <sql id="selectEnvironmentVo">
+        select envirId, envirName, envirUrl, user_id from environment
+    </sql>
+
+    <select id="selectEnvironmentList" parameterType="Environment" resultMap="EnvironmentResult">
+        <include refid="selectEnvironmentVo"/>
+        <where>
+            <if test="envirName != null  and envirName != ''"> and envirName like concat('%', #{envirName}, '%')</if>
+            <if test="envirUrl != null  and envirUrl != ''"> and envirUrl like concat('%', #{envirUrl}, '%')</if>
+            <if test="userId != null">and user_id =#{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectEnvironmentByEnvirId" parameterType="Long" resultMap="EnvironmentInterinfoResult">
+        select a.envirId, a.envirName, a.envirUrl, a.user_id,
+ b.interId as sub_interId, b.interName as sub_interName, b.interUrl as sub_interUrl, b.method as sub_method, b.paramType as sub_paramType, b.envirId as sub_envirId, b.interComment as sub_interComment, b.user_id as sub_user_id
+        from environment a
+        left join interinfo b on b.envirId = a.envirId
+        where a.envirId = #{envirId}
+    </select>
+
+    <insert id="insertEnvironment" parameterType="Environment" useGeneratedKeys="true" keyProperty="envirId">
+        insert into environment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="envirName != null">envirName,</if>
+            <if test="envirUrl != null">envirUrl,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="envirName != null">#{envirName},</if>
+            <if test="envirUrl != null">#{envirUrl},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEnvironment" parameterType="Environment">
+        update environment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="envirName != null">envirName = #{envirName},</if>
+            <if test="envirUrl != null">envirUrl = #{envirUrl},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where envirId = #{envirId}
+    </update>
+
+    <delete id="deleteEnvironmentByEnvirId" parameterType="Long">
+        delete from environment where envirId = #{envirId}
+    </delete>
+
+    <delete id="deleteEnvironmentByEnvirIds" parameterType="String">
+        delete from environment where envirId in
+        <foreach item="envirId" collection="array" open="(" separator="," close=")">
+            #{envirId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteInterinfoByEnvirIds" parameterType="String">
+        delete from interinfo where envirId in
+        <foreach item="envirId" collection="array" open="(" separator="," close=")">
+            #{envirId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteInterinfoByEnvirId" parameterType="Long">
+        delete from interinfo where envirId = #{envirId}
+    </delete>
+
+    <insert id="batchInterinfo">
+        insert into interinfo( interId, interName, interUrl, method, paramType, envirId, interComment, user_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.interId}, #{item.interName}, #{item.interUrl}, #{item.method}, #{item.paramType}, #{item.envirId}, #{item.interComment}, #{item.userId})
+        </foreach>
+    </insert>
+</mapper>

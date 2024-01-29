@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zou.system.mapper.TestresultMapper">
+
+    <resultMap type="Testresult" id="TestresultResult">
+        <result property="resultId"    column="resultId"    />
+        <result property="interName"    column="interName"    />
+        <result property="fullUrl"    column="fullUrl"    />
+        <result property="method"    column="method"    />
+        <result property="paramType"    column="paramType"    />
+        <result property="envirName"    column="envirName"    />
+        <result property="testComment"    column="testComment"    />
+        <result property="header"    column="header"    />
+        <result property="param"    column="param"    />
+        <result property="resCode"    column="resCode"    />
+        <result property="resBody"    column="resBody"    />
+        <result property="testTime"    column="testTime"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectTestresultVo">
+        select resultId, interName, fullUrl, method, paramType, envirName, testComment, header, param, resCode, resBody, testTime, user_id from testresult
+    </sql>
+
+    <select id="selectTestresultList" parameterType="Testresult" resultMap="TestresultResult">
+        <include refid="selectTestresultVo"/>
+        <where>
+            <if test="interName != null  and interName != ''"> and interName like concat('%', #{interName}, '%')</if>
+            <if test="fullUrl != null  and fullUrl != ''"> and fullUrl like concat('%', #{fullUrl}, '%')</if>
+            <if test="method != null  and method != ''"> and method = #{method}</if>
+            <if test="paramType != null  and paramType != ''"> and paramType = #{paramType}</if>
+            <if test="envirName != null  and envirName != ''"> and envirName like concat('%', #{envirName}, '%')</if>
+            <if test="testComment != null  and testComment != ''"> and testComment = #{testComment}</if>
+            <if test="resCode != null "> and resCode = #{resCode}</if>
+            <if test="resBody != null  and resBody != ''"> and resBody = #{resBody}</if>
+            <if test="testTime != null "> and testTime = #{testTime}</if>
+            <if test="userId != null">and user_id =#{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectTestresultByResultId" parameterType="Integer" resultMap="TestresultResult">
+        <include refid="selectTestresultVo"/>
+        where resultId = #{resultId}
+    </select>
+
+    <insert id="insertTestresult" parameterType="Testresult" useGeneratedKeys="true" keyProperty="resultId">
+        insert into testresult
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="interName != null">interName,</if>
+            <if test="fullUrl != null">fullUrl,</if>
+            <if test="method != null">method,</if>
+            <if test="paramType != null">paramType,</if>
+            <if test="envirName != null">envirName,</if>
+            <if test="testComment != null">testComment,</if>
+            <if test="header != null">header,</if>
+            <if test="param != null">param,</if>
+            <if test="resCode != null">resCode,</if>
+            <if test="resBody != null">resBody,</if>
+            <if test="testTime != null">testTime,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="interName != null">#{interName},</if>
+            <if test="fullUrl != null">#{fullUrl},</if>
+            <if test="method != null">#{method},</if>
+            <if test="paramType != null">#{paramType},</if>
+            <if test="envirName != null">#{envirName},</if>
+            <if test="testComment != null">#{testComment},</if>
+            <if test="header != null">#{header},</if>
+            <if test="param != null">#{param},</if>
+            <if test="resCode != null">#{resCode},</if>
+            <if test="resBody != null">#{resBody},</if>
+            <if test="testTime != null">#{testTime},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestresult" parameterType="Testresult">
+        update testresult
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="interName != null">interName = #{interName},</if>
+            <if test="fullUrl != null">fullUrl = #{fullUrl},</if>
+            <if test="method != null">method = #{method},</if>
+            <if test="paramType != null">paramType = #{paramType},</if>
+            <if test="envirName != null">envirName = #{envirName},</if>
+            <if test="testComment != null">testComment = #{testComment},</if>
+            <if test="header != null">header = #{header},</if>
+            <if test="param != null">param = #{param},</if>
+            <if test="resCode != null">resCode = #{resCode},</if>
+            <if test="resBody != null">resBody = #{resBody},</if>
+            <if test="testTime != null">testTime = #{testTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where resultId = #{resultId}
+    </update>
+
+    <delete id="deleteTestresultByResultId" parameterType="Integer">
+        delete from testresult where resultId = #{resultId}
+    </delete>
+
+    <delete id="deleteTestresultByResultIds" parameterType="String">
+        delete from testresult where resultId in
+        <foreach item="resultId" collection="array" open="(" separator="," close=")">
+            #{resultId}
+        </foreach>
+    </delete>
+</mapper>

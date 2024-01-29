@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zou.system.mapper.InterinfoMapper">
+
+    <resultMap type="Interinfo" id="InterinfoResult">
+        <result property="interId"    column="interId"    />
+        <result property="interName"    column="interName"    />
+        <result property="interUrl"    column="interUrl"    />
+        <result property="method"    column="method"    />
+        <result property="paramType"    column="paramType"    />
+        <result property="envirId"    column="envirId"    />
+        <result property="interComment"    column="interComment"    />
+        <result property="userId"    column="user_id"    />
+        <result property="environmentName" column="envirName"/>
+    </resultMap>
+
+    <resultMap id="InterinfoCaseinfoResult" type="Interinfo" extends="InterinfoResult">
+        <collection property="caseinfoList" notNullColumn="sub_caseId" javaType="java.util.List" resultMap="CaseinfoResult" />
+    </resultMap>
+
+    <resultMap type="Caseinfo" id="CaseinfoResult">
+        <result property="caseId"    column="sub_caseId"    />
+        <result property="caseName"    column="sub_caseName"    />
+        <result property="header"    column="sub_header"    />
+        <result property="param"    column="sub_param"    />
+        <result property="interId"    column="sub_interId"    />
+        <result property="caseDesc"    column="sub_caseDesc"    />
+        <result property="userId"    column="sub_user_id"    />
+    </resultMap>
+
+    <sql id="selectInterinfoVo">
+        select interId, interName, interUrl, method, paramType, i.envirId, interComment, i.user_id,envirName from interinfo i left JOIN environment e on i.envirId=e.envirId
+    </sql>
+
+    <select id="selectInterinfoList" parameterType="Interinfo" resultMap="InterinfoResult">
+        <include refid="selectInterinfoVo"/>
+        <where>
+            <if test="interName != null  and interName != ''"> and interName like concat('%', #{interName}, '%')</if>
+            <if test="interUrl != null  and interUrl != ''"> and interUrl like concat('%', #{interUrl}, '%')</if>
+            <if test="method != null  and method != ''"> and method = #{method}</if>
+            <if test="paramType != null  and paramType != ''"> and paramType = #{paramType}</if>
+            <if test="interComment != null  and interComment != ''"> and interComment like concat('%', #{interComment}, '%')</if>
+            <if test="userId != null">and i.user_id =#{userId}</if>
+            <if test="environmentName != null">and envirName like concat('%', #{environmentName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectInterinfoByInterId" parameterType="Long" resultMap="InterinfoCaseinfoResult">
+        select a.interId, a.interName, a.interUrl, a.method, a.paramType, a.envirId, a.interComment, a.user_id,
+ b.caseId as sub_caseId, b.caseName as sub_caseName, b.header as sub_header, b.param as sub_param, b.interId as sub_interId, b.caseDesc as sub_caseDesc, b.user_id as sub_user_id
+        from interinfo a
+        left join caseinfo b on b.interId = a.interId
+        where a.interId = #{interId}
+    </select>
+
+    <insert id="insertInterinfo" parameterType="Interinfo" useGeneratedKeys="true" keyProperty="interId">
+        insert into interinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="interName != null">interName,</if>
+            <if test="interUrl != null">interUrl,</if>
+            <if test="method != null">method,</if>
+            <if test="paramType != null">paramType,</if>
+            <if test="envirId != null">envirId,</if>
+            <if test="interComment != null">interComment,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="interName != null">#{interName},</if>
+            <if test="interUrl != null">#{interUrl},</if>
+            <if test="method != null">#{method},</if>
+            <if test="paramType != null">#{paramType},</if>
+            <if test="envirId != null">#{envirId},</if>
+            <if test="interComment != null">#{interComment},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInterinfo" parameterType="Interinfo">
+        update interinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="interName != null">interName = #{interName},</if>
+            <if test="interUrl != null">interUrl = #{interUrl},</if>
+            <if test="method != null">method = #{method},</if>
+            <if test="paramType != null">paramType = #{paramType},</if>
+            <if test="envirId != null">envirId = #{envirId},</if>
+            <if test="interComment != null">interComment = #{interComment},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where interId = #{interId}
+    </update>
+
+    <delete id="deleteInterinfoByInterId" parameterType="Long">
+        delete from interinfo where interId = #{interId}
+    </delete>
+
+    <delete id="deleteInterinfoByInterIds" parameterType="String">
+        delete from interinfo where interId in
+        <foreach item="interId" collection="array" open="(" separator="," close=")">
+            #{interId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteCaseinfoByInterIds" parameterType="String">
+        delete from caseinfo where interId in
+        <foreach item="interId" collection="array" open="(" separator="," close=")">
+            #{interId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteCaseinfoByInterId" parameterType="Long">
+        delete from caseinfo where interId = #{interId}
+    </delete>
+
+    <insert id="batchCaseinfo">
+        insert into caseinfo( caseId, caseName, header, param, interId, caseDesc, user_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.caseId}, #{item.caseName}, #{item.header}, #{item.param}, #{item.interId}, #{item.caseDesc}, #{item.userId})
+        </foreach>
+    </insert>
+</mapper>

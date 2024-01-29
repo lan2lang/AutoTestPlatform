@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zou.system.mapper.CaseinfoMapper">
+
+    <resultMap type="Caseinfo" id="CaseinfoResult">
+        <result property="caseId"    column="caseId"    />
+        <result property="caseName"    column="caseName"    />
+        <result property="header"    column="header"    />
+        <result property="param"    column="param"    />
+        <result property="interId"    column="interId"    />
+        <result property="caseDesc"    column="caseDesc"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectCaseinfoVo">
+        select caseId, caseName, header, param, interId, caseDesc, user_id from caseinfo
+    </sql>
+
+    <select id="selectCaseinfoList" parameterType="Caseinfo" resultMap="CaseinfoResult">
+        <include refid="selectCaseinfoVo"/>
+        <where>
+            <if test="caseName != null  and caseName != ''"> and caseName like concat('%', #{caseName}, '%')</if>
+            <if test="userId != null">and user_id =#{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectCaseinfoByCaseId" parameterType="Long" resultMap="CaseinfoResult">
+        <include refid="selectCaseinfoVo"/>
+        where caseId = #{caseId}
+    </select>
+
+    <insert id="insertCaseinfo" parameterType="Caseinfo" useGeneratedKeys="true" keyProperty="caseId">
+        insert into caseinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseName != null and caseName != ''">caseName,</if>
+            <if test="header != null">header,</if>
+            <if test="param != null">param,</if>
+            <if test="interId != null">interId,</if>
+            <if test="caseDesc != null">caseDesc,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseName != null and caseName != ''">#{caseName},</if>
+            <if test="header != null">#{header},</if>
+            <if test="param != null">#{param},</if>
+            <if test="interId != null">#{interId},</if>
+            <if test="caseDesc != null">#{caseDesc},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCaseinfo" parameterType="Caseinfo">
+        update caseinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseName != null and caseName != ''">caseName = #{caseName},</if>
+            <if test="header != null">header = #{header},</if>
+            <if test="param != null">param = #{param},</if>
+            <if test="interId != null">interId = #{interId},</if>
+            <if test="caseDesc != null">caseDesc = #{caseDesc},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where caseId = #{caseId}
+    </update>
+
+    <delete id="deleteCaseinfoByCaseId" parameterType="Long">
+        delete from caseinfo where caseId = #{caseId}
+    </delete>
+
+    <delete id="deleteCaseinfoByCaseIds" parameterType="String">
+        delete from caseinfo where caseId in
+        <foreach item="caseId" collection="array" open="(" separator="," close=")">
+            #{caseId}
+        </foreach>
+    </delete>
+</mapper>
