@@ -72,8 +72,8 @@ public class EnvironmentServiceImpl implements IEnvironmentService
     @Override
     public int updateEnvironment(Environment environment)
     {
-        environmentMapper.deleteInterinfoByEnvirId(environment.getEnvirId());
-        insertInterinfo(environment);
+//        environmentMapper.deleteInterinfoByEnvirId(environment.getEnvirId());
+//        insertInterinfo(environment);
         return environmentMapper.updateEnvironment(environment);
     }
 
@@ -103,7 +103,7 @@ public class EnvironmentServiceImpl implements IEnvironmentService
     @Override
     public int deleteEnvironmentByEnvirId(Long envirId)
     {
-        environmentMapper.deleteInterinfoByEnvirId(envirId);
+//        environmentMapper.deleteInterinfoByEnvirId(envirId);
         return environmentMapper.deleteEnvironmentByEnvirId(envirId);
     }
 

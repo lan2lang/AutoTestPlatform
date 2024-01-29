@@ -72,8 +72,8 @@ public class InterinfoServiceImpl implements IInterinfoService
     @Override
     public int updateInterinfo(Interinfo interinfo)
     {
-        interinfoMapper.deleteCaseinfoByInterId(interinfo.getInterId());
-        insertCaseinfo(interinfo);
+//        interinfoMapper.deleteCaseinfoByInterId(interinfo.getInterId());
+//        insertCaseinfo(interinfo);
         return interinfoMapper.updateInterinfo(interinfo);
     }
 

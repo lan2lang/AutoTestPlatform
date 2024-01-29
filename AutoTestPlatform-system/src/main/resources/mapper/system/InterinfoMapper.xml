@@ -17,17 +17,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <resultMap id="InterinfoCaseinfoResult" type="Interinfo" extends="InterinfoResult">
-        <collection property="caseinfoList" notNullColumn="sub_caseId" javaType="java.util.List" resultMap="CaseinfoResult" />
+<!--        <collection property="caseinfoList" notNullColumn="sub_caseId" javaType="java.util.List" resultMap="CaseinfoResult" />-->
     </resultMap>
 
     <resultMap type="Caseinfo" id="CaseinfoResult">
-        <result property="caseId"    column="sub_caseId"    />
-        <result property="caseName"    column="sub_caseName"    />
-        <result property="header"    column="sub_header"    />
-        <result property="param"    column="sub_param"    />
-        <result property="interId"    column="sub_interId"    />
-        <result property="caseDesc"    column="sub_caseDesc"    />
-        <result property="userId"    column="sub_user_id"    />
+<!--        <result property="caseId"    column="sub_caseId"    />-->
+<!--        <result property="caseName"    column="sub_caseName"    />-->
+<!--        <result property="header"    column="sub_header"    />-->
+<!--        <result property="param"    column="sub_param"    />-->
+<!--        <result property="interId"    column="sub_interId"    />-->
+<!--        <result property="caseDesc"    column="sub_caseDesc"    />-->
+<!--        <result property="userId"    column="sub_user_id"    />-->
     </resultMap>
 
     <sql id="selectInterinfoVo">
@@ -48,10 +48,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectInterinfoByInterId" parameterType="Long" resultMap="InterinfoCaseinfoResult">
-        select a.interId, a.interName, a.interUrl, a.method, a.paramType, a.envirId, a.interComment, a.user_id,
- b.caseId as sub_caseId, b.caseName as sub_caseName, b.header as sub_header, b.param as sub_param, b.interId as sub_interId, b.caseDesc as sub_caseDesc, b.user_id as sub_user_id
+        select a.interId,
+               a.interName,
+               a.interUrl,
+               a.method,
+               a.paramType,
+               a.envirId,
+               a.interComment,
+               envirName
         from interinfo a
-        left join caseinfo b on b.interId = a.interId
+                 left JOIN environment e on a.envirId = e.envirId
         where a.interId = #{interId}
     </select>
 
