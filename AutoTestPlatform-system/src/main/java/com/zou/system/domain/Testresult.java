@@ -1,24 +1,33 @@
 package com.zou.system.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.zou.common.annotation.Excel;
 import com.zou.common.core.domain.BaseEntity;
+import com.zou.system.domain.dto.ParamDto;
+import java.util.Date;
+import java.util.List;
+
+import io.swagger.annotations.ApiModel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 测试结果对象 testresult
- * 
+ *
  * @author zou
- * @date 2024-01-28
+ * @date 2024-01-30
  */
+@ApiModel(value = "测试结果实体类")
 public class Testresult extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 结果ID */
-    private Integer resultId;
+    private Long resultId;
+
+    /** 用例名称 */
+    @Excel(name = "用例名称")
+    private String caseName;
 
     /** 接口名称 */
     @Excel(name = "接口名称")
@@ -48,13 +57,19 @@ public class Testresult extends BaseEntity
     @Excel(name = "请求头信息")
     private String header;
 
+    /** 请求头列表 */
+    private List<ParamDto> headerList;
+
+    /** 请求参数列表 */
+    private List<ParamDto> paramList;
+
     /** 请求参数信息 */
     @Excel(name = "请求参数信息")
     private String param;
 
     /** 响应码 */
     @Excel(name = "响应码")
-    private Integer resCode;
+    private Long resCode;
 
     /** 响应内容 */
     @Excel(name = "响应内容")
@@ -66,130 +81,170 @@ public class Testresult extends BaseEntity
     private Date testTime;
 
     /** 用户id */
+    @Excel(name = "用户id")
     private Long userId;
 
-    public void setResultId(Integer resultId) 
+    public List<ParamDto> getHeaderList() {
+        return headerList;
+    }
+
+    public void setHeaderList(List<ParamDto> headerList) {
+        this.headerList = headerList;
+    }
+
+    public List<ParamDto> getParamList() {
+        return paramList;
+    }
+
+    public void setParamList(List<ParamDto> paramList) {
+        this.paramList = paramList;
+    }
+
+    public Long getResultId()
+    {
+        return resultId;
+    }
+
+    public void setResultId(Long resultId)
     {
         this.resultId = resultId;
     }
 
-    public Integer getResultId() 
+    public String getCaseName()
     {
-        return resultId;
+        return caseName;
     }
-    public void setInterName(String interName) 
+
+    public void setCaseName(String caseName)
+    {
+        this.caseName = caseName;
+    }
+
+    public String getInterName()
+    {
+        return interName;
+    }
+
+    public void setInterName(String interName)
     {
         this.interName = interName;
     }
 
-    public String getInterName() 
+    public String getFullUrl()
     {
-        return interName;
+        return fullUrl;
     }
-    public void setFullUrl(String fullUrl) 
+
+    public void setFullUrl(String fullUrl)
     {
         this.fullUrl = fullUrl;
     }
 
-    public String getFullUrl() 
+    public String getMethod()
     {
-        return fullUrl;
+        return method;
     }
-    public void setMethod(String method) 
+
+    public void setMethod(String method)
     {
         this.method = method;
     }
 
-    public String getMethod() 
+    public String getParamType()
     {
-        return method;
+        return paramType;
     }
-    public void setParamType(String paramType) 
+
+    public void setParamType(String paramType)
     {
         this.paramType = paramType;
     }
 
-    public String getParamType() 
+    public String getEnvirName()
     {
-        return paramType;
+        return envirName;
     }
-    public void setEnvirName(String envirName) 
+
+    public void setEnvirName(String envirName)
     {
         this.envirName = envirName;
     }
 
-    public String getEnvirName() 
+    public String getTestComment()
     {
-        return envirName;
+        return testComment;
     }
-    public void setTestComment(String testComment) 
+
+    public void setTestComment(String testComment)
     {
         this.testComment = testComment;
     }
 
-    public String getTestComment() 
+    public String getHeader()
     {
-        return testComment;
+        return header;
     }
-    public void setHeader(String header) 
+
+    public void setHeader(String header)
     {
         this.header = header;
     }
 
-    public String getHeader() 
+    public String getParam()
     {
-        return header;
+        return param;
     }
-    public void setParam(String param) 
+
+    public void setParam(String param)
     {
         this.param = param;
     }
 
-    public String getParam() 
+    public Long getResCode()
     {
-        return param;
+        return resCode;
     }
-    public void setResCode(Integer resCode) 
+
+    public void setResCode(Long resCode)
     {
         this.resCode = resCode;
     }
 
-    public Integer getResCode() 
+    public String getResBody()
     {
-        return resCode;
+        return resBody;
     }
-    public void setResBody(String resBody) 
+
+    public void setResBody(String resBody)
     {
         this.resBody = resBody;
     }
 
-    public String getResBody() 
+    public Date getTestTime()
     {
-        return resBody;
+        return testTime;
     }
-    public void setTestTime(Date testTime) 
+
+    public void setTestTime(Date testTime)
     {
         this.testTime = testTime;
     }
 
-    public Date getTestTime() 
-    {
-        return testTime;
-    }
-    public void setUserId(Long userId) 
-    {
-        this.userId = userId;
-    }
-
-    public Long getUserId() 
+    public Long getUserId()
     {
         return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("resultId", getResultId())
+            .append("caseName", getCaseName())
             .append("interName", getInterName())
             .append("fullUrl", getFullUrl())
             .append("method", getMethod())

@@ -59,10 +59,10 @@
         </dependency>
 
         <!-- 定时任务-->
-        <dependency>
-            <groupId>com.zou</groupId>
-            <artifactId>auto-quartz</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.zou</groupId>-->
+<!--            <artifactId>auto-quartz</artifactId>-->
+<!--        </dependency>-->
 
         <!-- 代码生成-->
         <dependency>

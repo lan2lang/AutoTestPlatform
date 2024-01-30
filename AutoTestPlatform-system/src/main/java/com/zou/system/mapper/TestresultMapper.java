@@ -7,7 +7,7 @@ import com.zou.system.domain.Testresult;
  * 测试结果Mapper接口
  * 
  * @author zou
- * @date 2024-01-28
+ * @date 2024-01-30
  */
 public interface TestresultMapper 
 {
@@ -17,7 +17,7 @@ public interface TestresultMapper
      * @param resultId 测试结果主键
      * @return 测试结果
      */
-    public Testresult selectTestresultByResultId(Integer resultId);
+    public Testresult selectTestresultByResultId(Long resultId);
 
     /**
      * 查询测试结果列表
@@ -49,7 +49,7 @@ public interface TestresultMapper
      * @param resultId 测试结果主键
      * @return 结果
      */
-    public int deleteTestresultByResultId(Integer resultId);
+    public int deleteTestresultByResultId(Long resultId);
 
     /**
      * 批量删除测试结果
@@ -57,5 +57,5 @@ public interface TestresultMapper
      * @param resultIds 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteTestresultByResultIds(Integer[] resultIds);
+    public int deleteTestresultByResultIds(Long[] resultIds);
 }

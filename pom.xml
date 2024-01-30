@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
     <groupId>com.zou</groupId>
     <artifactId>auto</artifactId>
     <version>3.8.7</version>
@@ -11,12 +11,12 @@
     <name>AutoTestPlatform</name>
     <url>http://www.ruoyi.vip</url>
     <description>自动化测试平台</description>
-    
+
     <properties>
         <auto.version>3.8.7</auto.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <druid.version>1.2.20</druid.version>
         <bitwalker.version>1.21</bitwalker.version>
@@ -136,11 +136,11 @@
             </dependency>
 
             <!-- 定时任务-->
-            <dependency>
-                <groupId>com.zou</groupId>
-                <artifactId>auto-quartz</artifactId>
-                <version>${auto.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.zou</groupId>-->
+<!--                <artifactId>auto-quartz</artifactId>-->
+<!--                <version>${auto.version}</version>-->
+<!--            </dependency>-->
 
             <!-- 代码生成-->
             <dependency>
@@ -177,7 +177,7 @@
         <module>AutoTestPlatform-admin</module>
         <module>AutoTestPlatform-framework</module>
         <module>AutoTestPlatform-system</module>
-        <module>AutoTestPlatform-quartz</module>
+<!--        <module>AutoTestPlatform-quartz</module>-->
         <module>AutoTestPlatform-generator</module>
         <module>AutoTestPlatform-common</module>
     </modules>

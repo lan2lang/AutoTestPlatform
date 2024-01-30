@@ -33,10 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectEnvironmentList" parameterType="Environment" resultMap="EnvironmentResult">
         <include refid="selectEnvironmentVo"/>
         <where>
-            <if test="envirName != null  and envirName != ''"> and envirName like concat('%', #{envirName}, '%')</if>
-            <if test="envirUrl != null  and envirUrl != ''"> and envirUrl like concat('%', #{envirUrl}, '%')</if>
+            <if test="envirName != null  and envirName != ''">and envirName like concat('%', #{envirName}, '%')</if>
+            <if test="envirUrl != null  and envirUrl != ''">and envirUrl like concat('%', #{envirUrl}, '%')</if>
             <if test="userId != null">and user_id =#{userId}</if>
         </where>
+        order by envirId desc
     </select>
 
     <select id="selectEnvironmentByEnvirId" parameterType="Long" resultMap="EnvironmentInterinfoResult">
