@@ -28,19 +28,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectTestresultList" parameterType="Testresult" resultMap="TestresultResult">
         <include refid="selectTestresultVo"/>
         <where>
-            <if test="caseName != null  and caseName != ''"> and caseName like concat('%', #{caseName}, '%')</if>
-            <if test="interName != null  and interName != ''"> and interName like concat('%', #{interName}, '%')</if>
-            <if test="fullUrl != null  and fullUrl != ''"> and fullUrl like concat('%', #{fullUrl}, '%')</if>
-            <if test="method != null  and method != ''"> and method = #{method}</if>
-            <if test="paramType != null  and paramType != ''"> and paramType = #{paramType}</if>
-            <if test="envirName != null  and envirName != ''"> and envirName like concat('%', #{envirName}, '%')</if>
-            <if test="testComment != null  and testComment != ''"> and testComment = #{testComment}</if>
-            <if test="header != null  and header != ''"> and header = #{header}</if>
-            <if test="param != null  and param != ''"> and param = #{param}</if>
-            <if test="resCode != null "> and resCode = #{resCode}</if>
-            <if test="resBody != null  and resBody != ''"> and resBody = #{resBody}</if>
-            <if test="testTime != null "> and testTime = #{testTime}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="caseName != null  and caseName != ''">and caseName like concat('%', #{caseName}, '%')</if>
+            <if test="interName != null  and interName != ''">and interName like concat('%', #{interName}, '%')</if>
+            <if test="fullUrl != null  and fullUrl != ''">and fullUrl like concat('%', #{fullUrl}, '%')</if>
+            <if test="method != null  and method != ''">and method = #{method}</if>
+            <if test="paramType != null  and paramType != ''">and paramType = #{paramType}</if>
+            <if test="envirName != null  and envirName != ''">and envirName like concat('%', #{envirName}, '%')</if>
+            <if test="testComment != null  and testComment != ''">and testComment = #{testComment}</if>
+            <if test="header != null  and header != ''">and header = #{header}</if>
+            <if test="param != null  and param != ''">and param = #{param}</if>
+            <if test="resCode != null ">and resCode like concat('%', #{resCode}, '%')</if>
+            <if test="resBody != null  and resBody != ''">and resBody = #{resBody}</if>
+            <if test="testTime != null ">and Date(testTime) = #{testTime}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
         </where>
         order by resultId desc
     </select>
