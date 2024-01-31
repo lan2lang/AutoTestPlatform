@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zou.system.mapper.TestresultMapper">
-    
+
     <resultMap type="Testresult" id="TestresultResult">
         <result property="resultId"    column="resultId"    />
         <result property="caseName"    column="caseName"    />
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectTestresultList" parameterType="Testresult" resultMap="TestresultResult">
         <include refid="selectTestresultVo"/>
-        <where>  
+        <where>
             <if test="caseName != null  and caseName != ''"> and caseName like concat('%', #{caseName}, '%')</if>
             <if test="interName != null  and interName != ''"> and interName like concat('%', #{interName}, '%')</if>
             <if test="fullUrl != null  and fullUrl != ''"> and fullUrl like concat('%', #{fullUrl}, '%')</if>
@@ -42,13 +42,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="testTime != null "> and testTime = #{testTime}</if>
             <if test="userId != null "> and user_id = #{userId}</if>
         </where>
+        order by resultId desc
     </select>
-    
+
     <select id="selectTestresultByResultId" parameterType="Long" resultMap="TestresultResult">
         <include refid="selectTestresultVo"/>
         where resultId = #{resultId}
     </select>
-        
+
     <insert id="insertTestresult" parameterType="Testresult" useGeneratedKeys="true" keyProperty="resultId">
         insert into testresult
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -108,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteTestresultByResultIds" parameterType="String">
-        delete from testresult where resultId in 
+        delete from testresult where resultId in
         <foreach item="resultId" collection="array" open="(" separator="," close=")">
             #{resultId}
         </foreach>

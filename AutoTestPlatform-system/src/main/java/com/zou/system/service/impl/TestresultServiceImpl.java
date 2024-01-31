@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 测试结果Service业务层处理
@@ -98,6 +99,7 @@ public class TestresultServiceImpl implements ITestresultService {
    * @return
    */
   @Override
+  @Transactional
   public int executeCase(Testresult testresult) throws IOException, InterruptedException {
 
     // 创建连接
@@ -169,11 +171,12 @@ public class TestresultServiceImpl implements ITestresultService {
     // 设置请求头信息
     List<ParamDto> headerList = testresult.getHeaderList();
 
-    requestBuilder.headers(
-        headerList.stream()
-            .flatMap(entry -> Stream.of(entry.getParamName(), entry.getValue()))
-            .toArray(String[]::new));
-
+    if (headerList != null && !headerList.isEmpty()) {
+      requestBuilder.headers(
+          headerList.stream()
+              .flatMap(entry -> Stream.of(entry.getParamName(), entry.getValue()))
+              .toArray(String[]::new));
+    }
     // 执行
     HttpRequest request = requestBuilder.build();
 
@@ -184,7 +187,8 @@ public class TestresultServiceImpl implements ITestresultService {
 
     testresult.setResBody(response.body());
 
-    // 查询环境名称
+    // 查询环境名称(根据接口id)
+    testresult.setEnvirName(testresultMapper.selectEnvirNameByInterId(testresult.getInterId()));
 
     // 插入测试结果
     return insertTestresult(testresult);

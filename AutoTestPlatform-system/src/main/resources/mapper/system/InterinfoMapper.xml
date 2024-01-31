@@ -45,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null">and i.user_id =#{userId}</if>
             <if test="environmentName != null">and envirName like concat('%', #{environmentName}, '%')</if>
         </where>
+        order by interId desc
     </select>
 
     <select id="selectInterinfoByInterId" parameterType="Long" resultMap="InterinfoCaseinfoResult">

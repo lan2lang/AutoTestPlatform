@@ -33,6 +33,9 @@ public class Testresult extends BaseEntity
     @Excel(name = "接口名称")
     private String interName;
 
+    /** 接口id（用来查询环境名称） */
+    private Long interId;
+
     /** 请求地址 */
     @Excel(name = "请求地址")
     private String fullUrl;
@@ -83,6 +86,14 @@ public class Testresult extends BaseEntity
     /** 用户id */
     @Excel(name = "用户id")
     private Long userId;
+
+    public Long getInterId() {
+        return interId;
+    }
+
+    public void setInterId(Long interId) {
+        this.interId = interId;
+    }
 
     public List<ParamDto> getHeaderList() {
         return headerList;

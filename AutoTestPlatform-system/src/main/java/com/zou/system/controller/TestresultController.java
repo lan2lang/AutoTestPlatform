@@ -44,6 +44,8 @@ public class TestresultController extends BaseController {
   public AjaxResult execute(@RequestBody Testresult testresult) {
     // 设置用户id
     testresult.setUserId(SecurityUtils.getUserId());
+    //设置请求头list和请求参数
+//    testresult.setParamList(JSON);
     try {
       return toAjax(testresultService.executeCase(testresult));
     } catch (IOException | InterruptedException e) {
