@@ -45,3 +45,5 @@ nbdist/
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
+/AutoTestPlatform-admin/src/test/java/
+/AutoTestPlatform-system/src/test/java/

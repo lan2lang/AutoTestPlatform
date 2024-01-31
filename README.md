@@ -1,5 +1,3 @@
-
-
 ## 平台简介
 
 基于Vue的自动化测试平台（接口测试）
@@ -10,5 +8,20 @@
 
 ## 如何开始
 
+springboot-2.5.15、jdk17、mysql8.0、redis
+
 1. 克隆项目到本地
-2. 
+
+2. 执行sql
+
+3. 修改配置文件
+
+   AutoTestPlatform-admin/src/main/resources/application.yml
+
+   application-druid.yml
+
+   配置redis和mysql
+
+4. 运行
+
+   AutoTestPlatform-admin/src/main/java/com/zou/BootApplication.java
