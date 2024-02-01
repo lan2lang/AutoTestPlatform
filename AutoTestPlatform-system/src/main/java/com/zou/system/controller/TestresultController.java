@@ -69,8 +69,13 @@ public class TestresultController extends BaseController {
   @Log(title = "测试结果", businessType = BusinessType.EXPORT)
   @PostMapping("/export")
   public void export(HttpServletResponse response, Testresult testresult) {
+//    没有分页，所以是所以数据
+
     List<Testresult> list = testresultService.selectTestresultList(testresult);
+
     ExcelUtil<Testresult> util = new ExcelUtil<Testresult>(Testresult.class);
+
+    //往响应流里写入excel文件
     util.exportExcel(response, list, "测试结果数据");
   }
 

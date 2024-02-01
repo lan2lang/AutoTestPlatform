@@ -2,6 +2,7 @@ package com.zou.system.service.impl;
 
 import com.zou.system.domain.Testresult;
 import com.zou.system.domain.dto.ParamDto;
+import com.zou.system.domain.vo.TestReportVo;
 import com.zou.system.mapper.TestresultMapper;
 import com.zou.system.service.ITestresultService;
 import java.io.IOException;
@@ -9,7 +10,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,138 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TestresultServiceImpl implements ITestresultService {
   @Autowired private TestresultMapper testresultMapper;
+
+  /**
+   * 生成测试报告
+   *
+   * @param testresult
+   * @return
+   */
+  @Override
+  public TestReportVo selectTestReport(Testresult testresult) {
+    // 查询要生成报告的数据
+    List<Testresult> testresults = selectTestresultList(testresult);
+    TestReportVo testReportVo = new TestReportVo();
+
+    //        byStream(testresults, testReportVo);
+    byFor(testresults, testReportVo);
+
+    return testReportVo;
+  }
+
+  /**
+   * 使用for循环进行数据处理
+   *
+   * @param testresults
+   * @param testReportVo
+   */
+  private void byFor(List<Testresult> testresults, TestReportVo testReportVo) {
+    Set<String> uniqueInterNames = new HashSet<>();
+    Set<String> uniqueCaseNames = new HashSet<>();
+    Set<String> uniqueEnvirNames = new HashSet<>();
+    // 使用 for 循环查询每一天的数据数量
+    Map<String, Long> dailyDataCount = new HashMap<>();
+    // 查询每个用例执行频率
+    Map<String, Long> caseFrequency = new HashMap<>();
+
+    int successNum = 0;
+    for (Testresult testresult : testresults) {
+      if (testresult.getResCode() == 200) {
+        successNum++;
+      }
+      // 将 Date 转换为 LocalDate,只保留日期
+      String date =
+          testresult
+              .getTestTime()
+              .toInstant()
+              .atZone(ZoneId.systemDefault())
+              .toLocalDate()
+              .toString();
+
+      dailyDataCount.put(date, dailyDataCount.getOrDefault(date, 0L) + 1);
+      caseFrequency.put(
+          testresult.getCaseName(), caseFrequency.getOrDefault(testresult.getCaseName(), 0L) + 1);
+
+      String interName = testresult.getInterName();
+      if (interName != null) {
+        uniqueInterNames.add(interName);
+      }
+
+      String caseName = testresult.getCaseName();
+      if (caseName != null) {
+        uniqueCaseNames.add(caseName);
+      }
+
+      String envirName = testresult.getEnvirName();
+      if (envirName != null) {
+        uniqueEnvirNames.add(envirName);
+      }
+    }
+    testReportVo.setSuccessCaseNum(successNum);
+    // 设置失败用例数
+    testReportVo.setFailCaseNum(testresults.size() - successNum);
+    testReportVo.setInterSum(uniqueInterNames.size());
+    testReportVo.setCaseSum(uniqueCaseNames.size());
+    testReportVo.setEnvirSum(uniqueEnvirNames.size());
+    testReportVo.setCaseTimeDistributionList(new ArrayList<>(dailyDataCount.entrySet()));
+    testReportVo.setCaseFrequency(new ArrayList<>(caseFrequency.entrySet()));
+  }
+
+  /**
+   * 使用stream流进行数据处理
+   *
+   * @param testresults
+   * @param testReportVo
+   */
+  private void byStream(List<Testresult> testresults, TestReportVo testReportVo) {
+    // 设置成功用例数
+    testReportVo.setSuccessCaseNum(
+        (int)
+            testresults.stream()
+                .filter(Objects::nonNull)
+                .filter(data -> data.getResCode() == 200)
+                .count());
+
+    // 设置失败用例数
+    testReportVo.setFailCaseNum(testresults.size() - testReportVo.getSuccessCaseNum());
+
+    // 设置涉及接口数量
+    testReportVo.setInterSum(
+        (int)
+            testresults.stream()
+                .map(Testresult::getInterName)
+                .filter(Objects::nonNull)
+                .distinct()
+                .count());
+    // 设置涉及用例数量
+    testReportVo.setCaseSum(
+        (int)
+            testresults.stream()
+                .map(Testresult::getCaseName)
+                .filter(Objects::nonNull)
+                .distinct()
+                .count());
+    // 设置涉及环境数量
+    testReportVo.setEnvirSum(
+        (int)
+            testresults.stream()
+                .map(Testresult::getEnvirName)
+                .filter(Objects::nonNull)
+                .distinct()
+                .count());
+
+    // 查询每一天的数据数量
+    //    Map<Date, Long> dailyDataCount =
+    //        testresults.stream()
+    //            .collect(Collectors.groupingBy(Testresult::getTestTime, Collectors.counting()));
+    //
+    // 查询每个用例执行频率
+    //    Map<String, Long> caseFrequency =
+    //        testresults.stream()
+    //            .collect(Collectors.groupingBy(Testresult::getCaseName, Collectors.counting()));
+
+    //    testReportVo.setCaseTimeDistributionList();
+  }
 
   /**
    * 查询测试结果

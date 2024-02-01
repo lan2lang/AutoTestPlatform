@@ -3,6 +3,7 @@ package com.zou.system.service;
 import java.io.IOException;
 import java.util.List;
 import com.zou.system.domain.Testresult;
+import com.zou.system.domain.vo.TestReportVo;
 
 /**
  * 测试结果Service接口
@@ -66,4 +67,11 @@ public interface ITestresultService
      * @return
      */
     int executeCase(Testresult testresult) throws IOException, InterruptedException;
+
+    /**
+     * 生成测试报告
+     * @param testresult
+     * @return
+     */
+    TestReportVo selectTestReport(Testresult testresult);
 }

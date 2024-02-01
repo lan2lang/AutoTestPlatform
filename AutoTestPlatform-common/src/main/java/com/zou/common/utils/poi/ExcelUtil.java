@@ -548,9 +548,14 @@ public class ExcelUtil<T>
      */
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title)
     {
+        //设置响应类型为sheet格式
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
+
+        //初始化表格
         this.init(list, sheetName, title, Type.EXPORT);
+
+        //把数据导入表格
         exportExcel(response);
     }
 

@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="testTime != null ">and Date(testTime) = #{testTime}</if>
             <if test="userId != null ">and user_id = #{userId}</if>
         </where>
-        order by resultId desc
+        order by testTime desc
     </select>
 
     <select id="selectTestresultByResultId" parameterType="Long" resultMap="TestresultResult">
