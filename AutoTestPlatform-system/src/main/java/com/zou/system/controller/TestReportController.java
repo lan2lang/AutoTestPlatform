@@ -24,4 +24,12 @@ public class TestReportController {
 
     return AjaxResult.success(testresultService.selectTestReport(testresult));
   }
+
+  @GetMapping("/list")
+  public AjaxResult test(Testresult testresult) {
+    // 设置用户id
+    testresult.setUserId(SecurityUtils.getUserId());
+
+    return AjaxResult.success(testresultService.selectTestReport(testresult));
+  }
 }

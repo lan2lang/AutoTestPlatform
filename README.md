@@ -12,7 +12,7 @@ springboot-2.5.15、jdk17、mysql8.0、redis
 
 1. 克隆项目到本地
 
-2. 执行sql
+2. 执行sql(只需要执行最新的)
 
 3. 修改配置文件
 
